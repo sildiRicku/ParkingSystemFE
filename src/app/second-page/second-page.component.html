@@ -1,0 +1,8 @@
+<h2>Select Parking System</h2>
+<select [(ngModel)]="selectedParkingSystemId">
+  <option value="0">-- Select --</option>
+  <option *ngFor="let parkingSystem of parkingSystems" [value]="parkingSystem.id">
+    {{ parkingSystem.identifier }}
+  </option>
+</select>
+
