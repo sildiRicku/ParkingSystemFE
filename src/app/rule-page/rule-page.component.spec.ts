@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecondPageComponent } from './second-page.component';
+import { RulePageComponent } from './rule-page.component';
 
 describe('SecondPageComponent', () => {
-  let component: SecondPageComponent;
-  let fixture: ComponentFixture<SecondPageComponent>;
+  let component: RulePageComponent;
+  let fixture: ComponentFixture<RulePageComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SecondPageComponent]
+      declarations: [RulePageComponent]
     });
-    fixture = TestBed.createComponent(SecondPageComponent);
+    fixture = TestBed.createComponent(RulePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

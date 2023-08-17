@@ -1,0 +1,35 @@
+<h2>Select Parking System</h2>
+<select [(ngModel)]="selectedParkingSystemId" (change)="onSelectParkingSystem()">
+  <option value="0">-- Select --</option>
+  <option *ngFor="let parkingSystem of parkingSystems" [value]="parkingSystem.id">
+    {{ parkingSystem.identifier }}
+  </option>
+</select>
+
+<div class="table-container">
+  <h2>RULES</h2>
+
+  <ng-container *ngIf="selectedParkingSystemRules.length > 0; else noRules">
+  <table *ngIf="selectedParkingSystemRules.length > 0" class="table-flex">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rule of selectedParkingSystemRules">
+        <td>{{ rule.name }}</td>
+        <td>{{ rule.startTime }}</td>
+        <td>{{ rule.endTime }}</td>
+        <td>{{ rule.cost }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+  <ng-template #noRules>
+    <p class="text-center">No available rules for the selected parking system.</p>
+  </ng-template>
+</div>
