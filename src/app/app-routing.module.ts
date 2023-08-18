@@ -5,7 +5,7 @@ import { RulePageComponent } from './rule-page/rule-page.component';
 
 const routes: Routes = [
   { path: '', component: WelcomePageComponent },
-  { path: 'second', component: RulePageComponent }
+  { path: 'rules', component: RulePageComponent }
 ];
 
 @NgModule({

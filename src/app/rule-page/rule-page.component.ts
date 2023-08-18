@@ -13,12 +13,12 @@ export class RulePageComponent implements OnInit {
   parkingSystems: ParkingSystemDTO[] = [];
   selectedParkingSystemId: number = 0;
   selectedParkingSystemRules: RuleDTO[] = []; 
+  isParkingSystemSelected: boolean = false; 
 
-  constructor(private parkingSystemService: ParkingSystemService,private ruleservice: RuleService) { }
+  constructor(private parkingSystemService: ParkingSystemService, private ruleservice: RuleService) { }
 
   ngOnInit() {
     this.getParkingSystems();
-    this.getRulesForSelectedParkingSystem();
   }
 
   getParkingSystems() {
@@ -37,6 +37,7 @@ export class RulePageComponent implements OnInit {
       this.ruleservice.getRulesForParkingSystem(this.selectedParkingSystemId).subscribe(
         (rules) => {
           this.selectedParkingSystemRules = rules;
+          this.isParkingSystemSelected = true; // Set the flag to true when parking system is selected
         },
         (error) => {
           console.error('Error fetching rules:', error);
@@ -45,7 +46,13 @@ export class RulePageComponent implements OnInit {
     }
   }
 
- onSelectParkingSystem() {
-    this.getRulesForSelectedParkingSystem();
+  onSelectParkingSystem() {
+    if (this.selectedParkingSystemId !==0) {
+      this.getRulesForSelectedParkingSystem();
+    } 
+    else {
+      this.isParkingSystemSelected = false; 
+    }
   }
 }
+
