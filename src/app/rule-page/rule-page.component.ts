@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ParkingSystemService } from '../parking-system.service';
-import { RuleService } from '../rule.service';
 import { ParkingSystemDTO } from '../parking-system.dto';
 import { RuleDTO } from '../rule.dto'; 
 
@@ -15,7 +14,7 @@ export class RulePageComponent implements OnInit {
   selectedParkingSystemRules: RuleDTO[] = []; 
   isParkingSystemSelected: boolean = false; 
 
-  constructor(private parkingSystemService: ParkingSystemService, private ruleservice: RuleService) { }
+  constructor(private parkingSystemService: ParkingSystemService) { }
 
   ngOnInit() {
     this.getParkingSystems();
@@ -34,7 +33,7 @@ export class RulePageComponent implements OnInit {
 
   getRulesForSelectedParkingSystem() {
     if (this.selectedParkingSystemId !== 0) {
-      this.ruleservice.getRulesForParkingSystem(this.selectedParkingSystemId).subscribe(
+      this.parkingSystemService.getRulesForParkingSystem(this.selectedParkingSystemId).subscribe(
         (rules) => {
           this.selectedParkingSystemRules = rules;
           this.isParkingSystemSelected = true; // Set the flag to true when parking system is selected
