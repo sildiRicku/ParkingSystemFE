@@ -1,0 +1,15 @@
+  .table-flex td{
+    display: table-cell;
+    width: 33.33%; 
+    padding: 8px; 
+    border: 3px solid #0c0c0c;
+  }
+ .table-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+.table-condensed th,
+.table-condensed td {
+  width: 25%;
+} 

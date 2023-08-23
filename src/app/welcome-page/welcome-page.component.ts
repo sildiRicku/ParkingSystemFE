@@ -10,6 +10,6 @@ export class WelcomePageComponent{
   constructor(private router: Router) {}
 
   redirectToSecondPage() {
-    this.router.navigateByUrl('/second');
+    this.router.navigateByUrl('/rules');
   }
 }
