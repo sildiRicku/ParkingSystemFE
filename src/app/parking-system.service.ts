@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ParkingSystemDTO } from './parking-system.dto'; 
-import { RuleDTO } from './rule.dto'; // Import RuleDTO here
+import { RuleDTO } from './rule.dto'; 
 
 
 

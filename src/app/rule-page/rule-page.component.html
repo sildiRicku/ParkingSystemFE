@@ -9,9 +9,9 @@
 </head>
 <body>
   <div class="container">
-    <h2 class="mt-4">Select Parking System</h2>
-    <select class="form-select w-50" [(ngModel)]="selectedParkingSystemId" (ngModelChange)="onSelectParkingSystem()">
-      <option [ngValue] =  0 >--Select--</option>
+    <h2 class="mt-4 center-content" >Select Parking System</h2>
+    <select class="form-select w-50 center-select" [(ngModel)]="selectedParkingSystemId" (ngModelChange)="onSelectParkingSystem()">
+      <option [ngValue] =  0 >----</option>
       <option *ngFor="let parkingSystem of parkingSystems" [value]="parkingSystem.id">
         {{ parkingSystem.identifier }}
       </option>
@@ -31,14 +31,26 @@
         </div>
       </ng-container>
       <table *ngIf="selectedParkingSystemId !== 0 && selectedParkingSystemRules.length > 0" class="table table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Cost/hour</th>
-          </tr>
-        </thead>
+       <thead>
+  <tr>
+    <th (click)="sortTable('name')">
+      Name
+      <i [ngClass]="sortColumn === 'name' ? (sortAscending ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill') : ''"></i>
+    </th>
+    <th (click)="sortTable('startTime')">
+      Start Time
+      <i [ngClass]="sortColumn === 'startTime' ? (sortAscending ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill') : ''"></i>
+    </th>
+    <th >
+      End Time
+    </th>
+    <th (click)="sortTable('cost')">
+      Cost/hour
+      <i [ngClass]="sortColumn === 'cost' ? (sortAscending ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill') : ''"></i>
+    </th>
+  </tr>
+</thead>
+
         <tbody>
           <tr *ngFor="let rule of selectedParkingSystemRules">
             <td>{{ rule.name }}</td>
@@ -50,7 +62,6 @@
       </table>
     </div>
   </div>
-  <!-- ... Your existing HTML template code ... -->
 
 </body>
 </html>

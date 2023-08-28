@@ -13,3 +13,11 @@
 .table-condensed td {
   width: 25%;
 } 
+
+.center-select {
+  display: block;
+  margin: 0 auto;
+}
+.center-content {
+  text-align: center;
+}

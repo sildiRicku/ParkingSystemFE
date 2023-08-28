@@ -13,6 +13,8 @@ export class RulePageComponent implements OnInit {
   selectedParkingSystemId: number = 0;
   selectedParkingSystemRules: RuleDTO[] = []; 
   isParkingSystemSelected: boolean = false; 
+  sortColumn: string = ''; 
+  sortAscending: boolean = true; 
 
   constructor(private parkingSystemService: ParkingSystemService) { }
 
@@ -53,5 +55,32 @@ export class RulePageComponent implements OnInit {
       this.isParkingSystemSelected = false; 
     }
   }
-}
+ 
+  
+    sortTable(column: string) {
+      if (this.sortColumn === column) {
+        this.sortAscending = !this.sortAscending;
+      } else {
+        this.sortColumn = column;
+        this.sortAscending = true;
+      }
+    
+      // Implement sorting logic based on the 'column' parameter and 'sortAscending' flag
+      this.selectedParkingSystemRules.sort((a, b) => {
+        const valueA = a[column as keyof RuleDTO];
+        const valueB = b[column as keyof RuleDTO];
+    
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+          return this.sortAscending ? valueA - valueB : valueB - valueA;
+        } else if (typeof valueA === 'string' && typeof valueB === 'string') {
+          const comparison = valueA.localeCompare(valueB);
+          return this.sortAscending ? comparison : -comparison;
+        } else {
+          // Handle other data types or mixed types if needed
+          return 0;
+        }
+      });
+    }
+  }
+  
 
