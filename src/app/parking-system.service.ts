@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ParkingSystemDTO } from './parking-system.dto'; 
 import { RuleDTO } from './rule.dto'; 
+import { environment } from '../environments/environment'; // Import the environment
 
 
 
@@ -10,7 +11,7 @@ import { RuleDTO } from './rule.dto';
   providedIn: 'root'
 })
 export class ParkingSystemService {
-  private apiUrl = 'http://localhost:8080/parking-system';
+  private apiUrl = environment.apiUrl; 
 
   constructor(private http: HttpClient) { }
 
