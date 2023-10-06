@@ -11,7 +11,7 @@ import { environment } from '../environments/environment'; // Import the environ
   providedIn: 'root'
 })
 export class ParkingSystemService {
-  private apiUrl = environment.apiUrl; 
+  private apiUrl = `${environment.apiUrl}/parking-system`; 
 
   constructor(private http: HttpClient) { }
 
