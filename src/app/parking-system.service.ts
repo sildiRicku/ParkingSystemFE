@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ParkingSystemDTO } from './parking-system.dto'; 
 import { RuleDTO } from './rule.dto'; 
-import { environment } from '../environments/environment'; // Import the environment
-
+import { environment } from '../environments/development-environment/environment'; 
 
 
 @Injectable({
