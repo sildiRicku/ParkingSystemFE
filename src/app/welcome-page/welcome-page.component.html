@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parking System</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <div class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
-    <div class="text-center mb-4">
-      <h1>Welcome to the Parking System</h1>
-    </div>
-    <div class="text-center">
-      <button class="btn btn-outline-primary btn-lg font-weight-bold" (click)="redirectToSecondPage()">
-        Enter
-      </button>
-    </div>
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
+  <div class="text-center mb-4">
+    <h1>Welcome to the Parking System</h1>
   </div>
-</body>
-</html>
+  <div class="text-center">
+    <form (submit)="login()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" id="email" [ngModel]="user.email" (ngModelChange)="user.email = $event" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" class="form-control" id="password" [ngModel]="user.password" (ngModelChange)="user.password = $event" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg font-weight-bold">Login</button>
+    </form>
+  </div>
+</div>
