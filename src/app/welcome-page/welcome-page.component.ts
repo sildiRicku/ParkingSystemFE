@@ -1,4 +1,3 @@
-// Add the necessary imports
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -8,28 +7,38 @@ import { Router } from '@angular/router';
   styleUrls: ['./welcome-page.component.css']
 })
 export class WelcomePageComponent {
-  // Define the user object
   user = {
     email: '',
     password: ''
   };
 
-  // Inject the Router in the constructor
+  emailFormatError: string = '';
+  passwordError: string = '';
+
   constructor(private router: Router) {}
 
-  // Handle the login logic
   login() {
-    // Replace with your hardcoded email and password
     const hardcodedEmail = 'user@example.com';
     const hardcodedPassword = 'password';
 
-    // Check if user input matches the hardcoded values
+    this.emailFormatError = '';
+    this.passwordError = '';
+
+    if (!this.isValidEmailFormat(this.user.email)) {
+      this.emailFormatError = 'Wrong email format';
+      return;
+    }
+
     if (this.user.email === hardcodedEmail && this.user.password === hardcodedPassword) {
-      // Redirect to the second page
       this.router.navigateByUrl('/rules');
     } else {
+      this.passwordError = 'Invalid email or password';
       console.log('Invalid email or password');
-      // You might want to display an error message to the user
     }
+  }
+
+  private isValidEmailFormat(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 }

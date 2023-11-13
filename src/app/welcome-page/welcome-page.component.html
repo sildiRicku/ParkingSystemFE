@@ -1,18 +1,40 @@
-<div class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
-  <div class="text-center mb-4">
-    <h1>Welcome to the Parking System</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to the Parking System</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="text-center">
+      <h1 class="mb-4">Welcome to the Parking System</h1>
+      <form (submit)="login()" class="needs-validation" novalidate>
+        <div class="mb-3 row">
+          <label for="email" class="col-sm-2 col-form-label text-right">Email:</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control mb-2" id="email" name="email" [(ngModel)]="user.email" required>
+            <div class="invalid-feedback d-block" *ngIf="emailFormatError">{{ emailFormatError }}</div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="password" class="col-sm-2 col-form-label text-right">Password:</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control mb-2" id="password" name="password" [(ngModel)]="user.password" required>
+            <div class="invalid-feedback d-block" *ngIf="passwordError">{{ passwordError }}</div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-primary btn-lg font-weight-bold">Login</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="text-center">
-    <form (submit)="login()">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email:</label>
-        <input type="email" class="form-control"name="email" id="email" [ngModel]="user.email" (ngModelChange)="user.email = $event" required>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password:</label>
-        <input type="password" class="form-control" name="password" id="password" [ngModel]="user.password" (ngModelChange)="user.password = $event" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-lg font-weight-bold">Login</button>
-    </form>
-  </div>
-</div>
+
+
+</body>
+</html>
