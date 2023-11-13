@@ -15,10 +15,11 @@ import { HttpClientModule } from '@angular/common/http';
     RulePageComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
-    FormsModule
+    AppRoutingModule
+    
   ],
   providers: [ParkingSystemService],
   bootstrap: [AppComponent]
