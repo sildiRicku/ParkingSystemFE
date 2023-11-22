@@ -7,12 +7,14 @@ import { RulePageComponent } from './rule-page/rule-page.component';
 import { FormsModule } from '@angular/forms';
 import { ParkingSystemService } from './parking-system.service';
 import { HttpClientModule } from '@angular/common/http';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
-    RulePageComponent
+    RulePageComponent,
+    NotFoundComponent
   ],
   imports: [
     FormsModule,
