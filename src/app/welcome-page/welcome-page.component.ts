@@ -30,6 +30,7 @@ export class WelcomePageComponent {
       () => {
         this.router.navigateByUrl('/rules');
       },
+
       (error: any) => {
         this.passwordError = 'Invalid email or password';
         console.log('Error response from server:', error);

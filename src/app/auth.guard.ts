@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { SessionService } from './session.service';
 import { Observable } from 'rxjs';
+import { AuthServiceService} from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,21 +17,21 @@ import { Observable } from 'rxjs';
 export class AuthGuard implements CanActivate {
   constructor(
     private sessionService: SessionService,
-    private router: Router
+    private router: Router,
+    private authService:AuthServiceService
   ) {}
-  // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-  //   throw new Error('Method not implemented.');
-  // }
+
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
-    if (!this.sessionService.isSessionExpired()) {
+  ):
+  Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    if (this.authService.isAuthenticated()) {
       return true;
+    } else {
+      this.router.navigate(['/']);
+      return false;
     }
-
-    this.router.navigate(['/login']);
-    return false;
   }
 };
