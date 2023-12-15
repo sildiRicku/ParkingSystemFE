@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class SessionService {
   private sessionTimeout = 30 * 1000; 
   private lastActivity!: number;
-  private username!: string;
+  private username: string | null = null; 
 
   constructor() {  this.resetSession();
   }
@@ -15,13 +15,18 @@ export class SessionService {
     this.lastActivity = Date.now();
   }
   setUsername(username: string): void {
-    sessionStorage.setItem('session', username); 
-  }
+ this.username=username; 
+ sessionStorage.setItem('username', username); 
+ }
 
   getUsername(): string | null {
-    return sessionStorage.getItem('session'); 
+    return this.username;
   }
+  clearUsername(): void {
+    this.username = null;
+    sessionStorage.removeItem('username'); 
 
+  }
 
   isSessionExpired(): boolean {
     const currentTime = Date.now();

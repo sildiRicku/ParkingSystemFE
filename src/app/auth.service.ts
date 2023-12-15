@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/development-environment/environment';
 import { SessionService } from './session.service';
 
@@ -11,7 +11,7 @@ import { SessionService } from './session.service';
 export class AuthServiceService {
   private baseUrl = environment.apiUrl;
   private isLoggedIn = false;
- 
+
 
   constructor(private http: HttpClient,private router:Router,private sessionService: SessionService) { }
   login(username: string, password: string): Observable<any> {
@@ -29,16 +29,18 @@ export class AuthServiceService {
       'Authorization': 'Basic ' + btoa(`${loginData.username}:${loginData.password}`)
   });
 
-  this.sessionService.setUsername(username);
 
-  const storedUsername = this.sessionService.getUsername();
-  console.log('Stored Username:', storedUsername);
-  return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' });
+  return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' }).pipe(
+    tap(() => {
+      this.sessionService.setUsername(username);
+    })
+  );
 }
 
 
 logout() {
   this.isLoggedIn = false;
+  this.sessionService.clearUsername(); 
   this.router.navigate(['/']);
 }
 
