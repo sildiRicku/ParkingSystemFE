@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/development-environment/environment';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthServiceService {
   private isLoggedIn = false;
  
 
-  constructor(private http: HttpClient,private router:Router) { }
+  constructor(private http: HttpClient,private router:Router,private sessionService: SessionService) { }
   login(username: string, password: string): Observable<any> {
 
     this.isLoggedIn = true;
@@ -28,6 +29,10 @@ export class AuthServiceService {
       'Authorization': 'Basic ' + btoa(`${loginData.username}:${loginData.password}`)
   });
 
+  this.sessionService.setUsername(username);
+
+  const storedUsername = this.sessionService.getUsername();
+  console.log('Stored Username:', storedUsername);
   return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' });
 }
 
