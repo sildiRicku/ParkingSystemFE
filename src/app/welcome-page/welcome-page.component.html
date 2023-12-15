@@ -13,14 +13,14 @@
       <h1 class="mb-4">Welcome to the Parking System</h1>
       <form (submit)="login()" class="needs-validation" novalidate>
         <div class="mb-3 row">
-          <label for="email" class="col-sm-2 col-form-label text-right">Email:</label>
+          <label for="email" class="col-sm-2 col-form-label text-right">Email </label>
           <div class="col-sm-10">
             <input type="email" class="form-control mb-2" id="email" name="email" [(ngModel)]="user.email" required>
             <div class="invalid-feedback d-block" *ngIf="emailFormatError">{{ emailFormatError }}</div>
           </div>
         </div>
         <div class="mb-3 row">
-          <label for="password" class="col-sm-2 col-form-label text-right">Password:</label>
+          <label for="password" class="col-sm-2 col-form-label text-right">Password </label>
           <div class="col-sm-10">
             <input type="password" class="form-control mb-2" id="password" name="password" [(ngModel)]="user.password" required>
             <div class="invalid-feedback d-block" *ngIf="passwordError">{{ passwordError }}</div>
@@ -34,7 +34,5 @@
       </form>
     </div>
   </div>
-
-
 </body>
 </html>

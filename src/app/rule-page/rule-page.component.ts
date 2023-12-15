@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ParkingSystemService } from '../parking-system.service';
 import { ParkingSystemDTO } from '../parking-system.dto';
 import { RuleDTO } from '../rule.dto'; 
+import { AuthServiceService } from '../auth.service';
 
 @Component({
   selector: 'app-second-page',
@@ -15,6 +16,7 @@ export class RulePageComponent implements OnInit {
   isParkingSystemSelected: boolean = false; 
   sortColumn: string = ''; 
   sortAscending: boolean = true; 
+  authService: any;
 
   constructor(private parkingSystemService: ParkingSystemService) { }
 
@@ -46,7 +48,9 @@ export class RulePageComponent implements OnInit {
       );
     }
   }
-
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
   onSelectParkingSystem() {
     if (this.selectedParkingSystemId !==0) {
       this.getRulesForSelectedParkingSystem();
@@ -65,7 +69,6 @@ export class RulePageComponent implements OnInit {
         this.sortAscending = true;
       }
     
-      // Implement sorting logic based on the 'column' parameter and 'sortAscending' flag
       this.selectedParkingSystemRules.sort((a, b) => {
         const valueA = a[column as keyof RuleDTO];
         const valueB = b[column as keyof RuleDTO];
@@ -76,7 +79,6 @@ export class RulePageComponent implements OnInit {
           const comparison = valueA.localeCompare(valueB);
           return this.sortAscending ? comparison : -comparison;
         } else {
-          // Handle other data types or mixed types if needed
           return 0;
         }
       });
