@@ -20,11 +20,7 @@ export class WelcomePageComponent implements OnInit {
   constructor(private router: Router, private authService: AuthServiceService) {}
 
   ngOnInit() {
-    const storedEmail = localStorage.getItem('rememberedEmail');
-    if (storedEmail) {
-      this.user.email = storedEmail;
-      this.user.rememberMe = true;
-    }
+    this.loadRememberedEmail();
   }
 
   login() {
@@ -38,12 +34,7 @@ export class WelcomePageComponent implements OnInit {
 
     this.authService.login(this.user.email, this.user.password).subscribe(
       () => {
-        if (this.user.rememberMe) {
-          localStorage.setItem('rememberedEmail', this.user.email);
-        } else {
-          localStorage.removeItem('rememberedEmail');
-        }
-
+        this.updateRememberedEmail();
         this.router.navigateByUrl('/rules');
       },
       (error: any) => {
@@ -51,6 +42,22 @@ export class WelcomePageComponent implements OnInit {
         console.log('Error response from server:', error);
       }
     );
+  }
+
+  private loadRememberedEmail() {
+    const storedEmail = localStorage.getItem('rememberedEmail');
+    if (storedEmail) {
+      this.user.email = storedEmail;
+      this.user.rememberMe = true;
+    }
+  }
+
+  private updateRememberedEmail() {
+    if (this.user.rememberMe) {
+      localStorage.setItem('rememberedEmail', this.user.email);
+    } else {
+      localStorage.removeItem('rememberedEmail');
+    }
   }
 
   private isValidEmailFormat(email: string): boolean {
