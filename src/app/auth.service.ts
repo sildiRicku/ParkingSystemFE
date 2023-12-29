@@ -20,33 +20,24 @@ export class AuthServiceService {
   ) {}
 
   login(username: string, password: string, rememberMe: boolean = false): Observable<any> {
-    this.isLoggedIn = true;
-
-    if (!rememberMe) {
-      setTimeout(() => {
-        this.logout();
-      }, 30000);
-    }
-
     const loginData = { username, password };
-    console.log('Request payload:', loginData);
-
     const headers = this.createHeaders(loginData);
-
     const apiUrl = `${this.baseUrl}/login`;
-    
+  
     return this.http.post(apiUrl, loginData, { headers, responseType: 'text' }).pipe(
       tap(() => {
         if (rememberMe) {
           this.sessionService.setUsername(username);
         }
+        this.isLoggedIn = true;
       }),
       catchError((error) => {
         console.error('Login error:', error);
-        return throwError(error);
+        return throwError('Invalid email or password');
       })
     );
   }
+  
 
   private createHeaders(loginData: { username: string; password: string }): HttpHeaders {
     return new HttpHeaders({

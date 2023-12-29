@@ -26,19 +26,19 @@ export class WelcomePageComponent implements OnInit {
   login() {
     this.emailFormatError = '';
     this.passwordError = '';
-
+  
     if (!this.isValidEmailFormat(this.user.email)) {
       this.emailFormatError = 'Wrong email format';
       return;
     }
-
-    this.authService.login(this.user.email, this.user.password).subscribe(
+  
+    this.authService.login(this.user.email, this.user.password, this.user.rememberMe).subscribe(
       () => {
         this.updateRememberedEmail();
         this.router.navigateByUrl('/rules');
       },
-      (error: any) => {
-        this.passwordError = 'Invalid email or password';
+      (error) => {
+        this.passwordError = error; 
         console.log('Error response from server:', error);
       }
     );
