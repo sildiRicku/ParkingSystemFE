@@ -8,22 +8,26 @@ import { FormsModule } from '@angular/forms';
 import { ParkingSystemService } from './parking-system.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SessionTimeoutDialogComponent } from './session-timeout-dialog/session-timeout-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
     RulePageComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SessionTimeoutDialogComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
-    
+    AppRoutingModule,
+    MatDialogModule
   ],
   providers: [ParkingSystemService],
   bootstrap: [AppComponent]
+  
 })
 export class AppModule { }

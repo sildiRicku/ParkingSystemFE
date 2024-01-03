@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth.service';
+import { SessionService } from '../session.service';
+import { Subject, takeUntil } from 'rxjs';
+import * as $ from 'jquery';
+import * as bootstrap from "bootstrap";
+
 @Component({
   selector: 'app-welcome-page',
   templateUrl: './welcome-page.component.html',
@@ -14,8 +19,13 @@ export class WelcomePageComponent {
 
   emailFormatError: string = '';
   passwordError: string = '';
+  showSessionExpirationPopup: boolean = false;
 
-  constructor(private router: Router,private authService: AuthServiceService) {}
+  private ngUnsubscribe = new Subject<void>();
+
+  constructor(private router: Router,private authService: AuthServiceService,private sessionService: SessionService) {
+}
+
 
   login() {
     this.emailFormatError = '';
@@ -28,9 +38,9 @@ export class WelcomePageComponent {
 
     this.authService.login(this.user.email, this.user.password).subscribe(
       () => {
+        this.sessionService.resetSession(); // Call resetSession after a successful login
         this.router.navigateByUrl('/rules');
       },
-
       (error: any) => {
         this.passwordError = 'Invalid email or password';
         console.log('Error response from server:', error);
@@ -38,6 +48,9 @@ export class WelcomePageComponent {
     );
   }
 
+ 
+
+  
   private isValidEmailFormat(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
