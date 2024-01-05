@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth.service';
 import { SessionService } from '../session.service';
 import { Subject, takeUntil } from 'rxjs';
-import * as $ from 'jquery';
 import * as bootstrap from "bootstrap";
 
 @Component({
@@ -21,7 +20,6 @@ export class WelcomePageComponent {
   passwordError: string = '';
   showSessionExpirationPopup: boolean = false;
 
-  private ngUnsubscribe = new Subject<void>();
 
   constructor(private router: Router,private authService: AuthServiceService,private sessionService: SessionService) {
 }

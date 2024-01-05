@@ -40,32 +40,53 @@ export class AuthServiceService {
     })
   );
 }
-logout() {
-  this.isLoggedIn = false;
-  this.sessionService.clearUsername();
-  this.stopSessionTimeout(); // Stop session timeout on logout
-  this.router.navigate(['/']);
-}
+
 isAuthenticated() {
   return this.isLoggedIn;
 }
 
 private startSessionTimeout() {
+  let active = true; // Flag to track user activity
+
   this.sessionService.startSessionTimeout(() => {
-    // Timeout callback
     const dialogRef = this.dialog.open(SessionTimeoutDialogComponent, {
       width: '300px',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    // Listen for mouse move events to track user activity during the countdown
+    const mouseMoveListener = () => {
+      active = true;
+      this.sessionService.resetSession(); // Reset session on activity
+      dialogRef.close(); // Close the dialog
+      window.removeEventListener('mousemove', mouseMoveListener); // Remove the listener
+    };
+
+    window.addEventListener('mousemove', mouseMoveListener);
+
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'extend') {
+        this.sessionService.resetSession(); // Reset the session on extension
+        active = false; // Reset the activity flag
         this.startSessionTimeout(); // Extend session
       } else {
         this.logout(); // Redirect to login page
       }
     });
+
+    // Start a timer to close the dialog if there's no activity after 30 seconds
+    setTimeout(() => {
+      if (!active) {
+        dialogRef.close('logout');
+      }
+    }, 30000); // 30 seconds
   });
+}
+logout() {
+  this.isLoggedIn = false;
+  this.sessionService.clearUsername();
+  this.stopSessionTimeout(); // Stop session timeout on logout
+  this.router.navigate(['/']);
 }
 private stopSessionTimeout() {
   this.sessionService.stopSessionTimeout();

@@ -7,7 +7,6 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class SessionService {
   private lastActivity!: number;
   private username: string | null = null; 
-  private sessionExpirationInterval: any;
   private sessionTimeout = 30 * 1000; // Set your session timeout duration
   private sessionTimer: any; // Variable to hold the session timer
 
@@ -17,6 +16,8 @@ export class SessionService {
   }
   resetSession(): void {
     this.lastActivity = Date.now();
+    this.startInactivityCheck();
+
   }
 
   setUsername(username: string): void {
@@ -33,6 +34,18 @@ export class SessionService {
 
   }
   isSessionExpired(): boolean {
+    const currentTime = Date.now();
+    return currentTime - this.lastActivity > this.sessionTimeout;
+  }
+
+  private startInactivityCheck(): void {
+    setInterval(() => {
+      if (this.isInactive()) {
+        // Trigger the session timeout logic here
+      }
+    }, 1000);
+  }
+  private isInactive(): boolean {
     const currentTime = Date.now();
     return currentTime - this.lastActivity > this.sessionTimeout;
   }
