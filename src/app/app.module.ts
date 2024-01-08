@@ -23,7 +23,6 @@ import { SessionTimeoutModalComponent } from './session-timeout-modal/session-ti
     BrowserModule,
     HttpClientModule,
     AppRoutingModule
-    
   ],
   providers: [ParkingSystemService],
   bootstrap: [AppComponent]
