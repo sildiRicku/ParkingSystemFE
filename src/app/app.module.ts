@@ -8,13 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { ParkingSystemService } from './parking-system.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
     RulePageComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SessionTimeoutModalComponent
   ],
   imports: [
     FormsModule,
