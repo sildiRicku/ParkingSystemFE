@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/development-environment/environment';
@@ -8,7 +8,7 @@ import { SessionService } from './session.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthServiceService implements OnInit  {
   private baseUrl = environment.apiUrl;
   private isLoggedIn = false;
 
@@ -44,6 +44,14 @@ logout() {
   this.router.navigate(['/']);
 }
 
+ngOnInit(): void {
+  window.addEventListener('mousemove', () => this.sessionService.resetTimeout());
+  window.addEventListener('keypress', () => this.sessionService.resetTimeout());
+
+  this.sessionService.onTimeout().subscribe(() => {
+    this.sessionService.showTimeoutModal();
+  });
+}
 isAuthenticated() {
   return this.isLoggedIn;
 }

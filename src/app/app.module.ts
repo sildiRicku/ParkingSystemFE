@@ -9,6 +9,9 @@ import { ParkingSystemService } from './parking-system.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -21,10 +24,12 @@ import { SessionTimeoutModalComponent } from './session-timeout-modal/session-ti
   imports: [
     FormsModule,
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule
-  ],
-  providers: [ParkingSystemService],
+    AppRoutingModule,
+ModalModule  
+],
+  providers: [ParkingSystemService,BsModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

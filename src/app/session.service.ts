@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,38 +10,19 @@ export class SessionService {
   private sessionTimeout = 30 * 1000; 
   private lastActivity!: number;
   private username: string | null = null; 
-  private readonly timeoutDuration = 30000; // 30 seconds
+  private  timeoutDuration = 30000; // 30 seconds
   private timer: any;
-  private bsModalRef!: BsModalRef;
-  constructor(private modalService: BsModalService) {}
+  private timeoutSubject = new Subject<void>();
+
+  constructor(private modalService: BsModalService,  private bsModalRef: BsModalRef) {}
 
 
-  resetTimeout(): void {
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      this.showTimeoutModal();
-    }, this.timeoutDuration);
-  }
   clearTimeout(): void {
     clearTimeout(this.timer);
   }
 
-  private showTimeoutModal(): void {
-    this.bsModalRef = this.modalService.show(SessionTimeoutModalComponent, {
-      class: 'modal-dialog-centered',
-      backdrop: 'static',
-      keyboard: false,
-    });
-
-    this.bsModalRef.content.onContinue.subscribe(() => {
-      this.resetTimeout();
-    });
-
-    this.bsModalRef.content.onLogout.subscribe(() => {
-      // Redirect to logout or login page as needed
-      // For now, let's log out
-      console.log('Logging out...');
-    });
+  onTimeout(): Observable<void> {
+    return this.timeoutSubject.asObservable();
   }
   resetSession(): void {
     this.lastActivity = Date.now();
@@ -63,4 +45,28 @@ export class SessionService {
     const currentTime = Date.now();
     return currentTime - this.lastActivity > this.sessionTimeout;
   }
+  resetTimeout(): void {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      if (this.isSessionExpired()) {
+        this.showTimeoutModal();
+      }
+    }, this.timeoutDuration);
+  }
+   showTimeoutModal(): void {
+    this.bsModalRef = this.modalService.show(SessionTimeoutModalComponent, {
+      class: 'modal-dialog-centered',
+      backdrop: 'static',
+      keyboard: false,
+    });
+  
+    this.bsModalRef.content.onContinue.subscribe(() => {
+      this.resetTimeout();
+    });
+  
+    this.bsModalRef.content.onLogout.subscribe(() => {
+      console.log('Logging out...');
+    });
+  }
 }
+

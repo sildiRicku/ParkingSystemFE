@@ -3,6 +3,7 @@ import { ParkingSystemService } from '../parking-system.service';
 import { ParkingSystemDTO } from '../parking-system.dto';
 import { RuleDTO } from '../rule.dto'; 
 import { AuthServiceService } from '../auth.service';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-second-page',
