@@ -8,7 +8,7 @@ import { SessionService } from './session.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService implements OnInit  {
+export class AuthServiceService   {
   private baseUrl = environment.apiUrl;
   private isLoggedIn = false;
 
@@ -33,6 +33,8 @@ export class AuthServiceService implements OnInit  {
   return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' }).pipe(
     tap(() => {
       this.sessionService.setUsername(username);
+      this.sessionService.openSessionTimeoutModal(this.sessionService.sessionTimeoutModal);
+
     })
   );
 }
@@ -40,18 +42,11 @@ export class AuthServiceService implements OnInit  {
 
 logout() {
   this.isLoggedIn = false;
-  this.sessionService.clearUsername(); 
+  this.sessionService.clearUsername();
   this.router.navigate(['/']);
+  this.sessionService.clearTimeout(); // Clear the timeout on logout
 }
 
-ngOnInit(): void {
-  window.addEventListener('mousemove', () => this.sessionService.resetTimeout());
-  window.addEventListener('keypress', () => this.sessionService.resetTimeout());
-
-  this.sessionService.onTimeout().subscribe(() => {
-    this.sessionService.showTimeoutModal();
-  });
-}
 isAuthenticated() {
   return this.isLoggedIn;
 }

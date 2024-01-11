@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
 import { Observable, Subject } from 'rxjs';
@@ -7,15 +7,37 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class SessionService {
+  @ViewChild('sessionTimeoutModal') sessionTimeoutModal!: TemplateRef<any>;
+  modalRef!: BsModalRef;
   private sessionTimeout = 30 * 1000; 
   private lastActivity!: number;
   private username: string | null = null; 
-  private  timeoutDuration = 30000; // 30 seconds
   private timer: any;
   private timeoutSubject = new Subject<void>();
 
-  constructor(private modalService: BsModalService,  private bsModalRef: BsModalRef) {}
+  constructor(private modalService: BsModalService,  private bsModalRef: BsModalRef,private zone: NgZone) {}
 
+
+  openSessionTimeoutModal(sessionTimeoutModal: TemplateRef<any>): void {
+    const bsModalRef: BsModalRef = this.modalService.show(sessionTimeoutModal, {
+      class: 'modal-dialog-centered',
+      backdrop: 'static',
+      keyboard: false,
+    });
+    this.modalRef = bsModalRef; // Add this line
+
+    if (bsModalRef.content) {
+      bsModalRef.content?.onContinue$.subscribe(() =>  {
+        console.log('User clicked continue. Resetting timeout.');
+        this.resetTimeout();
+      });
+    
+     
+  bsModalRef.content?.onLogout$.subscribe(() => {
+        console.log('User clicked logout. Logging out...');
+      });
+    }
+  }
 
   clearTimeout(): void {
     clearTimeout(this.timer);
@@ -45,28 +67,38 @@ export class SessionService {
     const currentTime = Date.now();
     return currentTime - this.lastActivity > this.sessionTimeout;
   }
-  resetTimeout(): void {
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      if (this.isSessionExpired()) {
-        this.showTimeoutModal();
-      }
-    }, this.timeoutDuration);
-  }
-   showTimeoutModal(): void {
-    this.bsModalRef = this.modalService.show(SessionTimeoutModalComponent, {
-      class: 'modal-dialog-centered',
-      backdrop: 'static',
-      keyboard: false,
-    });
-  
-    this.bsModalRef.content.onContinue.subscribe(() => {
-      this.resetTimeout();
-    });
-  
-    this.bsModalRef.content.onLogout.subscribe(() => {
-      console.log('Logging out...');
-    });
-  }
-}
 
+  resetTimeout(): void {
+    console.log('Resetting timeout...');
+    clearTimeout(this.timer);
+    if (this.isSessionExpired()) {
+      console.log('Session is expired. Triggering timeoutSubject.');
+      this.timeoutSubject.next(); // Trigger the timeoutSubject
+      this.showTimeoutModal();
+    } else {
+      this.timer = setTimeout(() => {
+        console.log('Session timeout reached. Resetting timeout.');
+        this.resetTimeout();
+      }, this.sessionTimeout);
+    }
+  }
+
+   
+  private showTimeoutModal(): void {
+    console.log('Showing timeout modal.');
+
+    // Ensure the modalService exists before attempting to show the modal
+    if (this.modalService) {
+      // Use NgZone to run the modal display function inside Angular's zone
+      this.zone.run(() => {
+        // Show the modal
+        this.modalRef = this.modalService.show(SessionTimeoutModalComponent, {
+          class: 'modal-dialog-centered',
+          backdrop: 'static',
+          keyboard: false,
+        });
+      });
+    } else {
+      console.error('Modal service is not available.');
+    }
+  }}

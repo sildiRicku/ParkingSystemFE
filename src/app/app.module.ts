@@ -27,7 +27,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-ModalModule  
+    ModalModule.forRoot(),
 ],
   providers: [ParkingSystemService,BsModalService],
   bootstrap: [AppComponent]

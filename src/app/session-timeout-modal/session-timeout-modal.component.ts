@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Subject } from 'rxjs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { SessionService } from '../session.service';
@@ -10,27 +10,28 @@ import { SessionService } from '../session.service';
 export class SessionTimeoutModalComponent {
   public onContinue$: Subject<void> = new Subject<void>();
   public onLogout$: Subject<void> = new Subject<void>();
+  private cdr: ChangeDetectorRef | undefined  
 
   constructor(public bsModalRef: BsModalRef, private sessionService: SessionService) {}
 
   ngOnInit(): void {
-    // Subscribe to the session timeout observable
     this.sessionService.onTimeout().subscribe(() => {
-      // Perform actions when session timeout occurs
       console.log('Session timeout. Perform actions here.');
-      // Optionally, trigger logout or other actions
-      this.onContinue();
+      this.onContinue$.next(); 
     });
   }
 
   onContinue(): void {
-    // Notify the service that the user wants to continue
+
     this.sessionService.resetTimeout();
     this.bsModalRef.hide();
   }
+
   onLogout(): void {
-    // Perform logout actions if needed
     this.bsModalRef.hide();
   }
 
+  onClose(): void {
+    this.bsModalRef.hide();
+  }
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ParkingSystemService } from '../parking-system.service';
 import { ParkingSystemDTO } from '../parking-system.dto';
 import { RuleDTO } from '../rule.dto'; 
 import { AuthServiceService } from '../auth.service';
 import { SessionService } from '../session.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-second-page',
@@ -11,6 +12,8 @@ import { SessionService } from '../session.service';
   styleUrls: ['./rule-page.component.css']
 })
 export class RulePageComponent implements OnInit {
+  @ViewChild('sessionTimeoutModal') sessionTimeoutModal!: TemplateRef<any>;
+  modalRef!: BsModalRef;
   parkingSystems: ParkingSystemDTO[] = [];
   selectedParkingSystemId: number = 0;
   selectedParkingSystemRules: RuleDTO[] = []; 
@@ -19,12 +22,12 @@ export class RulePageComponent implements OnInit {
   sortAscending: boolean = true; 
   authService: any;
 
-  constructor(private parkingSystemService: ParkingSystemService) { }
+  constructor(private parkingSystemService: ParkingSystemService,private modalService: BsModalService) { }
 
   ngOnInit() {
     this.getParkingSystems();
   }
-
+  
   getParkingSystems() {
     this.parkingSystemService.getParkingSystems().subscribe(
       (parkingSystems) => {
