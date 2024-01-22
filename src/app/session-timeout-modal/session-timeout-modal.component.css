@@ -1,4 +1,4 @@
-.modal-open {
-    overflow-y: auto;
+.modal {
+    display: block !important;
+    opacity: 1 !important;
   }
-  

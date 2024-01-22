@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SessionService } from '../session.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-session-timeout-modal',
@@ -13,15 +14,7 @@ export class SessionTimeoutModalComponent {
   public onContinue$: Subject<void> = new Subject<void>();
   public onLogout$: Subject<void> = new Subject<void>();
 
-  constructor(public bsModalRef: BsModalRef, private sessionService: SessionService) {}
-
-  ngOnInit(): void {
-    this.sessionService.onTimeout().subscribe(() => {
-      console.log('Session timeout. Perform actions here.');
-      this.onContinue$.next(); 
-    });
-  }
-
+  constructor(public bsModalRef: BsModalRef, private sessionService: SessionService, private modalService:BsModalService) {}
   onContinue(): void {
 
     this.sessionService.resetTimeout();

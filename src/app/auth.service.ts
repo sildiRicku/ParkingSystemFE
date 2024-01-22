@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/development-environment/environment';
 import { SessionService } from './session.service';
-
+import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +33,7 @@ export class AuthServiceService   {
   return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' }).pipe(
     tap(() => {
       this.sessionService.setUsername(username);
-      this.sessionService.openSessionTimeoutModal(this.sessionService.sessionTimeoutModal);
+      this.sessionService.openSessionTimeoutModal();
 
     })
   );

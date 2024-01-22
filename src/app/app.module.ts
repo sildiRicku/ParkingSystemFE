@@ -10,14 +10,16 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { SessionService } from './session.service';
+import { AuthServiceService } from './auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
-    RulePageComponent,
+    RulePageComponent,  
     NotFoundComponent,
     SessionTimeoutModalComponent
   ],
@@ -30,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     FormsModule
 ],
-  providers: [ParkingSystemService,BsModalService],
-  bootstrap: [AppComponent]
+  providers: [ParkingSystemService, SessionService, AuthServiceService,BsModalService],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }
