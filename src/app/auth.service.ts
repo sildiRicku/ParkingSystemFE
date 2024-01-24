@@ -8,17 +8,17 @@ import { SessionTimeoutModalComponent } from './session-timeout-modal/session-ti
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService   {
+export class AuthServiceService  {
   private baseUrl = environment.apiUrl;
   private isLoggedIn = false;
 
 
   constructor(private http: HttpClient,private router:Router,private sessionService: SessionService) { }
   login(username: string, password: string): Observable<any> {
-
     this.isLoggedIn = true;
     setTimeout(() => {
-      this.logout();
+      this.sessionService.showTimeoutModal();
+      // this.logout();
     }, 30000);
 
     const loginData = { username,password };
@@ -33,21 +33,20 @@ export class AuthServiceService   {
   return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' }).pipe(
     tap(() => {
       this.sessionService.setUsername(username);
-      this.sessionService.openSessionTimeoutModal();
-
+      this.sessionService.resetTimeout(); // Ensure this is being called to start tracking user activity
     })
   );
 }
-
-
 logout() {
   this.isLoggedIn = false;
   this.sessionService.clearUsername();
   this.router.navigate(['/']);
-  this.sessionService.clearTimeout(); // Clear the timeout on logout
 }
 
 isAuthenticated() {
   return this.isLoggedIn;
+}
+setAuthenticated(status: boolean): void {
+  this.isLoggedIn = status;
 }
   }

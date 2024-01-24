@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SessionService } from '../session.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-session-timeout-modal',
@@ -10,22 +11,32 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./session-timeout-modal.component.css'],
 
 })
-export class SessionTimeoutModalComponent {
+export class SessionTimeoutModalComponent implements OnInit  {
   public onContinue$: Subject<void> = new Subject<void>();
   public onLogout$: Subject<void> = new Subject<void>();
 
-  constructor(public bsModalRef: BsModalRef, private sessionService: SessionService, private modalService:BsModalService) {}
-  onContinue(): void {
+  constructor(public bsModalRef: BsModalRef, private sessionService: SessionService, private modalService:BsModalService,private router: Router) {}
 
-    this.sessionService.resetTimeout();
-    this.bsModalRef.hide();
+ 
+  
+  ngOnInit(): void {
+    this.sessionService.startSessionCheck();
+
   }
 
-  onLogout(): void {
-    this.bsModalRef.hide();
+  
+  onUserActivity(): void {
+
+  }
+
+  onContinue(): void {
+    console.log('OK button clicked in the modal.');
+    this.onContinue$.next();
   }
 
   onClose(): void {
-    this.bsModalRef.hide();
+    this.router.navigate(['/login']);
+
+    console.log('Modal closed without interaction.');
   }
 }

@@ -12,8 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./rule-page.component.css']
 })
 export class RulePageComponent implements OnInit {
-  // @ViewChild('sessionTimeoutModal') sessionTimeoutModal!: TemplateRef<any>;
-  // modalRef!: BsModalRef;
+
   parkingSystems: ParkingSystemDTO[] = [];
   selectedParkingSystemId: number = 0;
   selectedParkingSystemRules: RuleDTO[] = []; 
