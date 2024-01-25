@@ -4,11 +4,12 @@ import { SessionTimeoutModalComponent } from './session-timeout-modal/session-ti
 import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthServiceService } from './auth.service';
+import { SessionConfigService } from './session-config.service';
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-  private sessionTimeout = 30000; // 30 seconds
+  private sessionTimeout: number; 
   private lastActivity: number = Date.now();
   private username: string | null = null; 
   private timer: any;
@@ -16,9 +17,9 @@ export class SessionService {
   private modalRef!: BsModalRef;
   private authService: AuthServiceService | undefined;
 
-  constructor(private modalService: BsModalService,private zone: NgZone,private router: Router,private injector: Injector
+  constructor(private modalService: BsModalService,private zone: NgZone,private router: Router,private injector: Injector,private sessionConfigService: SessionConfigService
+ ) {    this.sessionTimeout = this.sessionConfigService.getSessionTimeout();
 
- ) {
  }
 
  private getAuthService(): AuthServiceService {
@@ -27,7 +28,7 @@ export class SessionService {
 
     onUserActivity(): void {
       this.lastActivity = Date.now();
-      this.resetTimeout(); // Reset the timeout on user activity
+      this.resetTimeout(); 
     }
 
     resetTimeout(): void {
@@ -52,7 +53,6 @@ export class SessionService {
           keyboard: false,
         });
     
-        // Subscribe to user actions
         this.modalRef.content.onContinue$.subscribe(() => {
           console.log('Continue button clicked. Resetting timeout.');
           this.resetSession();
@@ -68,15 +68,14 @@ export class SessionService {
         });
       });
     
-      // Set a timeout to automatically logout if no action is taken
       setTimeout(() => {
         if (!userActionTaken) {
           console.log('No action taken. Redirecting to login page.');
           this.getAuthService().setAuthenticated(false);
           this.router.navigate(['/']);
-          this.modalRef.hide(); // Make sure to hide the modal
+          this.modalRef.hide(); 
         }
-      }, 15000); // 15 seconds timeout
+      }, 15000); 
     }
 
     resetSession(): void {
