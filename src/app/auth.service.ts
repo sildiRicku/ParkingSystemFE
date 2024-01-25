@@ -16,11 +16,6 @@ export class AuthServiceService  {
   constructor(private http: HttpClient,private router:Router,private sessionService: SessionService) { }
   login(username: string, password: string): Observable<any> {
     this.isLoggedIn = true;
-    setTimeout(() => {
-      this.sessionService.showTimeoutModal();
-      // this.logout();
-    }, 30000);
-
     const loginData = { username,password };
     console.log('Request payload:', loginData); 
 
@@ -33,12 +28,12 @@ export class AuthServiceService  {
   return this.http.post(`${this.baseUrl}/login`, loginData, { headers, responseType: 'text' }).pipe(
     tap(() => {
       this.sessionService.setUsername(username);
-      this.sessionService.resetTimeout(); // Ensure this is being called to start tracking user activity
+      this.sessionService.startSessionCheck();
+
     })
   );
 }
 logout() {
-  this.isLoggedIn = false;
   this.sessionService.clearUsername();
   this.router.navigate(['/']);
 }

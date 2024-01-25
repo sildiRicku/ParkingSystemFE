@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SessionService } from './session.service';
 import { AuthServiceService } from './auth.service';
+import { UserActivityDirective } from './user-activity.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AuthServiceService } from './auth.service';
     WelcomePageComponent,
     RulePageComponent,  
     NotFoundComponent,
-    SessionTimeoutModalComponent
+    SessionTimeoutModalComponent,
+    UserActivityDirective
   ],
   imports: [
     BrowserModule,

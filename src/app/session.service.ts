@@ -1,4 +1,4 @@
-import { Injectable,Injector,NgZone,TemplateRef, ViewChild } from '@angular/core';
+import { HostListener, Injectable,Injector,NgZone,TemplateRef, ViewChild } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
 import { Observable, Subject } from 'rxjs';
@@ -18,23 +18,31 @@ export class SessionService {
 
   constructor(private modalService: BsModalService,private zone: NgZone,private router: Router,private injector: Injector
 
- ) {}
+ ) {
+ }
 
  private getAuthService(): AuthServiceService {
   return this.injector.get(AuthServiceService);
 }
 
+    onUserActivity(): void {
+      this.lastActivity = Date.now();
+      this.resetTimeout(); // Reset the timeout on user activity
+    }
+
     resetTimeout(): void {
       clearTimeout(this.timer);
   
       this.timer = setTimeout(() => {
-        console.log('Session timeout reached. Showing modal.');
-        this.showTimeoutModal()
+        const isAuthenticated =this.getAuthService().isAuthenticated();
+        if (isAuthenticated && !this.isUserActive()) {
+          console.log('Session timeout reached. Showing modal.');
+          this.showTimeoutModal();
+        }
       },this.sessionTimeout);
     }
-
+ 
     showTimeoutModal(): void {
-      if (this.getAuthService().isAuthenticated()){
       let userActionTaken = false;
     
       this.zone.run(() => {
@@ -70,20 +78,14 @@ export class SessionService {
         }
       }, 15000); // 15 seconds timeout
     }
-  }
-    
+
     resetSession(): void {
       this.lastActivity = Date.now();
       this.resetTimeout();
     }
-    onUserActivity(): void {
-      this.lastActivity = Date.now();
-    }
-  
     startSessionCheck(): void {
       this.resetTimeout();
     }
-
 
   setUsername(username: string): void {
  this.username=username; 
@@ -102,5 +104,9 @@ export class SessionService {
   isSessionExpired(): boolean {
     const currentTime = Date.now();
     return currentTime - this.lastActivity > this.sessionTimeout;
+  }
+  isUserActive(): boolean {
+    const currentTime = Date.now();
+    return currentTime - this.lastActivity < this.sessionTimeout;
   }
   }
