@@ -23,12 +23,6 @@ export class SessionTimeoutModalComponent implements OnInit  {
     this.sessionService.startSessionCheck();
 
   }
-
-  
-  onUserActivity(): void {
-
-  }
-
   onContinue(): void {
     console.log('OK button clicked in the modal.');
     this.onContinue$.next();

@@ -16,6 +16,7 @@ export class SessionService {
   private timeoutSubject = new Subject<void>();
   private modalRef!: BsModalRef;
   private authService: AuthServiceService | undefined;
+  private sessionCheckActive = true; // Flag to control session check
 
   constructor(private modalService: BsModalService,private zone: NgZone,private router: Router,private injector: Injector,private sessionConfigService: SessionConfigService
  ) {    this.sessionTimeout = this.sessionConfigService.getSessionTimeout();
@@ -36,7 +37,7 @@ export class SessionService {
   
       this.timer = setTimeout(() => {
         const isAuthenticated =this.getAuthService().isAuthenticated();
-        if (isAuthenticated && !this.isUserActive()) {
+        if (this.sessionCheckActive && isAuthenticated && !this.isUserActive()) {
           console.log('Session timeout reached. Showing modal.');
           this.showTimeoutModal();
         }
@@ -45,6 +46,8 @@ export class SessionService {
  
     showTimeoutModal(): void {
       let userActionTaken = false;
+
+  
     
       this.zone.run(() => {
         this.modalRef = this.modalService.show(SessionTimeoutModalComponent, {
@@ -77,7 +80,6 @@ export class SessionService {
         }
       }, 15000); 
     }
-
     resetSession(): void {
       this.lastActivity = Date.now();
       this.resetTimeout();
@@ -99,7 +101,9 @@ export class SessionService {
     sessionStorage.removeItem('username'); 
 
   }
-
+  clearSession(): void {
+    clearTimeout(this.timer); 
+  }
   isSessionExpired(): boolean {
     const currentTime = Date.now();
     return currentTime - this.lastActivity > this.sessionTimeout;
@@ -107,5 +111,8 @@ export class SessionService {
   isUserActive(): boolean {
     const currentTime = Date.now();
     return currentTime - this.lastActivity < this.sessionTimeout;
+  }
+  setSessionCheckActive(active: boolean): void {
+    this.sessionCheckActive = active;
   }
   }
