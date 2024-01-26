@@ -15,6 +15,7 @@ export class SessionInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     this.sessionService.resetSession();
+    this.sessionService.resetTimeout();
     return next.handle(request);
   }
 }

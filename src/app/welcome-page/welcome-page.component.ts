@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth.service';
+import { SessionService } from '../session.service';
+import { SessionTimeoutModalComponent } from '../session-timeout-modal/session-timeout-modal.component';
+
 @Component({
   selector: 'app-welcome-page',
   templateUrl: './welcome-page.component.html',
   styleUrls: ['./welcome-page.component.css']
 })
 export class WelcomePageComponent {
+
   user = {
     email: '',
     password: ''
@@ -15,8 +19,7 @@ export class WelcomePageComponent {
   emailFormatError: string = '';
   passwordError: string = '';
 
-  constructor(private router: Router,private authService: AuthServiceService) {}
-
+  constructor(private router: Router,private authService: AuthServiceService,private sessionService: SessionService) {}
   login() {
     this.emailFormatError = '';
     this.passwordError = '';
@@ -35,6 +38,7 @@ export class WelcomePageComponent {
         this.passwordError = 'Invalid email or password';
         console.log('Error response from server:', error);
       }
+
     );
   }
 
@@ -42,4 +46,5 @@ export class WelcomePageComponent {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
+
 }
